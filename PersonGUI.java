@@ -318,8 +318,8 @@ public class PersonGUI extends JFrame implements ActionListener {
 		// prompt the user for a file to choose using JFileChooser
 		fileChooser = new JFileChooser();
 
-//		//default directory is our java project
-//		fileChooser.setCurrentDirectory(new File("."));
+		// //default directory is our java project
+		// fileChooser.setCurrentDirectory(new File("."));
 
 		// open dialog menu, select file to open
 		int response = fileChooser.showOpenDialog(fileChooser);
@@ -466,11 +466,51 @@ public class PersonGUI extends JFrame implements ActionListener {
 		String govInput = JOptionPane.showInputDialog(this, "Enter the government ID (if applicable): ");
 		String studentInput = JOptionPane.showInputDialog(this, "Enter the student ID (if applicable): ");
 
+		// using a while loop for the program to keep prompting unless the boolean flag
+		// = true which indicates the day entered is valid
+
+		// also declare OCCCDate outside the while loop so that we can use it in the
+		// Person constructors below
+
+		boolean isValidDate = false;
+		OCCCDate dob = null;
+
+		// attempt to create the dob using OCCCDate, plug into the constructors of the
+		// Person classes (parent and child)
+		// split the dob by spaces
+		while (isValidDate == false) {
+			try {
+				String dobInput = JOptionPane.showInputDialog(this, "Enter the date of birth as shown [dd mm yyyy]: ");
+
+				String[] dateMonthYear = dobInput.split(" "); // array of 3
+
+				int date = Integer.parseInt(dateMonthYear[0]);
+				int month = Integer.parseInt(dateMonthYear[1]);
+				int year = Integer.parseInt(dateMonthYear[2]);
+
+				dob = new OCCCDate(date, month, year); // will throw exception if invalid date entered, this gui will
+														// catch
+
+				isValidDate = true; // if the date is successfully created, then we are able to mark true to allow
+									// the program to exit the while loop
+				// if throws exception, then show error pop-up and reprompt the user
+			} catch (InvalidOCCCDateException e) {
+				JOptionPane.showMessageDialog(this, "Invalid date! Please try again with format [dd mm yyyy].", "Error",
+						JOptionPane.ERROR_MESSAGE);
+
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Error parsing the date. Please enter it exactly as [dd mm yyyy].",
+						"Error", JOptionPane.ERROR_MESSAGE);
+
+			}
+
+		}
+
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
 		if (govInput != "" && studentInput != "") {
-			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
+			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			// use registeredPerson constructor
 			OCCCPerson o = new OCCCPerson(r, studentInput);
@@ -480,14 +520,14 @@ public class PersonGUI extends JFrame implements ActionListener {
 		}
 
 		else if (govInput != "" && studentInput != "") {
-			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
+			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			viewObjectsMenu.addItem(r);
 			pList.add(r);
 		}
 
 		else {
-			Person p = new Person(fnInput, lnInput);
+			Person p = new Person(fnInput, lnInput, dob);
 
 			viewObjectsMenu.addItem(p);
 			pList.add(p);
@@ -527,11 +567,51 @@ public class PersonGUI extends JFrame implements ActionListener {
 		String govInput = JOptionPane.showInputDialog(this, "Enter the government ID (if applicable): ");
 		String studentInput = JOptionPane.showInputDialog(this, "Enter the student ID (if applicable): ");
 
+		/// using a while loop for the program to keep prompting unless the boolean flag
+		// = true which indicates the day entered is valid
+
+		// also declare OCCCDate outside the while loop so that we can use it in the
+		// Person constructors below
+
+		boolean isValidDate = false;
+		OCCCDate dob = null;
+
+		// attempt to create the dob using OCCCDate, plug into the constructors of the
+		// Person classes (parent and child)
+		// split the dob by spaces
+		while (isValidDate == false) {
+			try {
+				String dobInput = JOptionPane.showInputDialog(this, "Enter the date of birth as shown [dd mm yyyy]: ");
+
+				String[] dateMonthYear = dobInput.split(" "); // array of 3
+
+				int date = Integer.parseInt(dateMonthYear[0]);
+				int month = Integer.parseInt(dateMonthYear[1]);
+				int year = Integer.parseInt(dateMonthYear[2]);
+
+				dob = new OCCCDate(date, month, year); // will throw exception if invalid date entered, this gui will
+														// catch
+
+				isValidDate = true; // if the date is successfully created, then we are able to mark true to allow
+									// the program to exit the while loop
+				// if throws exception, then show error pop-up and reprompt the user
+			} catch (InvalidOCCCDateException e) {
+				JOptionPane.showMessageDialog(this, "Invalid date! Please try again with format [dd mm yyyy].", "Error",
+						JOptionPane.ERROR_MESSAGE);
+
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Error parsing the date. Please enter it exactly as [dd mm yyyy].",
+						"Error", JOptionPane.ERROR_MESSAGE);
+
+			}
+
+		}
+
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
 		if (govInput != "" && studentInput != "") {
-			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
+			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			// use registeredPerson constructor
 			OCCCPerson o = new OCCCPerson(r, studentInput);
@@ -542,7 +622,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 		}
 
 		else if (govInput != "" && studentInput != "") {
-			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
+			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			viewObjectsMenu.remove(a);
 
@@ -552,7 +632,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 		}
 
 		else {
-			Person p = new Person(fnInput, lnInput);
+			Person p = new Person(fnInput, lnInput, dob);
 
 			viewObjectsMenu.remove(a);
 
