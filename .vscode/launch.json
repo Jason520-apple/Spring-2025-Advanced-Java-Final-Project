@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - PersonManagerGUI",
+            "request": "launch",
+            "mainClass": "PersonManagerGUI", // Assuming PersonManagerGUI is in the root or the directory you're working in
+            "cwd": "${workspaceFolder}", // Set the current working directory to your project root
+            "classpath": [
+                "${workspaceFolder}/bin",
+                "${workspaceFolder}/lib/**/*.jar"
+            ]
+        }
+    ]
+}

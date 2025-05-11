@@ -1,0 +1,8 @@
+{
+  
+    "java.project.sourcePaths": ["."], // Tell the language server to consider the project root as a source path
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ]
+}
