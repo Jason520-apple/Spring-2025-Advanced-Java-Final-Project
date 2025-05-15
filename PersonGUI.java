@@ -519,7 +519,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 			pList.add(o);// add to the array list that will be saved and loaded
 		}
 
-		else if (govInput != "" && studentInput != "") {
+		else if (govInput != "") {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			viewObjectsMenu.addItem(r);
@@ -621,7 +621,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 			pList.set(a, o);
 		}
 
-		else if (govInput != "" && studentInput != "") {
+		else if (govInput != "") {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			viewObjectsMenu.remove(a);
