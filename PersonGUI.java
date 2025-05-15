@@ -1,7 +1,6 @@
-// Jason Vo
 // OCCC Spring 2025
 // Advanced Java
-// Unit 5 Homework - Person Application
+// Unit 8 Project - Person GUI
 
 import java.awt.BorderLayout;
 import java.awt.Font;
