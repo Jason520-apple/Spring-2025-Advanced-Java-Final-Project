@@ -1,3 +1,4 @@
+ main
 // OCCC Spring 2025
 // Advanced Java
 // Unit 8 Project - Person GUI
@@ -54,3 +55,4 @@ public class OCCCPerson extends RegisteredPerson {
 	}
 
 }
+

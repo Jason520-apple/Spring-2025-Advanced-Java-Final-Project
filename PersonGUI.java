@@ -1,3 +1,4 @@
+main
 // OCCC Spring 2025
 // Advanced Java
 // Unit 8 Project - Person GUI
@@ -45,6 +46,11 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 	String[] objects; // array used to display Person objects in the JComboBox, updated alongside
 						// ArrayList
+  
+  // creating global variables for last modified so any portion of the GUI
+	// is able to use them.
+	// added by Travis Bauman
+	static Long originalLastModified, currentLastModified;
 
 	// A JMenuBar in Java Swing provides a menu bar for a window, typically a
 	// JFrame. It houses JMenu objects, which, when selected, display JMenuItem
@@ -236,11 +242,67 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 	// when the user hits the close button, runs our own exit code, can handle
 	// whatever needs to be taken care of on exit
-	public static void exitMenu() {
-		System.out.println("EXIT FUNCTION CALLED...");
+  // removed Static - Travis Bauman
+	public void exitMenu() {
+    
+    int choice = 0;
 
-		// close program
-		System.exit(0);
+		// created a JOptionPane.showOptionDialog to allow users to choose
+		// their preferred save and then exit.
+		// Added by Travis Bauman
+		String[] options = {"Save and Exit", "Don't Save and Exit", "Cancel"};
+		
+		// If no original last modified then no file has be created, ask to save
+		//Travis Bauman
+		if(Objects.isNull(originalLastModified)) {
+			choice = JOptionPane.showOptionDialog(null,
+					"You have yet to save this file.", 
+					"Exit Menu",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.INFORMATION_MESSAGE,
+					null,
+					options,
+					options[0]);
+		}
+		
+		// If current last modified is null then no changes have been made free to exit
+		// however, if the current last modified does exist but it is less than or equal to original last modified
+		// then changes have been made but the user has saved the file since then.
+		// Travis Bauman
+		else if (Objects.isNull(currentLastModified) || currentLastModified.compareTo(originalLastModified) < 0) {
+			// close program
+			System.exit(0);
+		}
+		
+		// otherwise an edit has been made and the file has not been saved since changes were made
+			//Travis Bauman
+		else {
+			choice = JOptionPane.showOptionDialog(null,
+					"You have made changes since your last save.", 
+					"Exit Menu",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.INFORMATION_MESSAGE,
+					null,
+					options,
+					options[0]);
+		}
+		
+		//Uses switch to implement user choice
+		//Added by Travis Bauman
+		switch (choice) {
+			case 0:
+				try {
+					saveFile();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				System.exit(0);
+			case 1:
+				System.exit(0);
+			case 2:
+				break;
+		}
 
 	}
 
@@ -383,6 +445,10 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 			// for use with save file when overriding its data after edits
 			currentFile = selectedFile;
+      
+      //recording the opening of the file and it's last modified date.
+			//Added by Travis Bauman
+			originalLastModified = currentFile.lastModified();
 
 		}
 
@@ -405,9 +471,13 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 		// in other cases when user does create objects
 		else {
-
+      
 			ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(currentFile)); // create a stream
-
+      
+        //recording the time the file was saved
+        //Added by Travis Bauman
+        originalLastModified = currentFile.lastModified();
+      
 			for (int i = 0; i < pList.size(); i++) {
 				objOut.writeObject(pList.get(i));
 			}
@@ -436,7 +506,11 @@ public class PersonGUI extends JFrame implements ActionListener {
 			if (response == fileChooser.APPROVE_OPTION) {
 
 				File saveFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
-
+        
+        //recording the time the file was created.
+				//Added by Travis Bauman
+				originalLastModified = saveFile.lastModified();
+        
 				// object output stream, outputs to a file output to a file named
 				// Person_GUI_List.ser; copying our objects into a file (.bin)
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(saveFile));
@@ -457,7 +531,14 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void createNewPerson() {
-
+  
+    
+    //Checks to see if currentFile has been initialized yet if it has then updates currentLastModified
+		//Added by Travis Bauman
+		if (currentFile != null) {
+			currentLastModified = currentFile.lastModified();
+		}
+    
 		// prompt for the JTextFields for firstName, lastName, govID, and student ID if
 		// applicable
 		String fnInput = JOptionPane.showInputDialog(this, "Enter the first name: ");
@@ -508,7 +589,8 @@ public class PersonGUI extends JFrame implements ActionListener {
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
-		if (govInput != "" && studentInput != "") {
+    // Changed != "" to != null it appears to give more consistent results - Travis Bauman
+		if (govInput != null && studentInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			// use registeredPerson constructor
@@ -517,8 +599,9 @@ public class PersonGUI extends JFrame implements ActionListener {
 			viewObjectsMenu.addItem(o);// add to view menu
 			pList.add(o);// add to the array list that will be saved and loaded
 		}
-
-		else if (govInput != "") {
+    
+    // Changed != "" to != null it appears to give more consistent results - Travis Bauman
+		else if (govInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			viewObjectsMenu.addItem(r);
@@ -535,7 +618,13 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void deletePerson() {
-
+    
+    //Checks to see if currentFile has been initialized yet if it has updates currentLastModified
+		//Added by Travis Bauman
+		if (currentFile != null) {
+			currentLastModified = currentFile.lastModified();
+		}
+    
 		// get the selected index of the Person that the user wants to delete
 		int a = objectIndex;
 
@@ -546,7 +635,14 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void editPerson() {
-
+    
+    
+    //Checks to see if currentFile has been initialized yet if it has updates currentLastModified
+		//Added by Travis Bauman
+		if (currentFile != null) {
+			currentLastModified = currentFile.lastModified();
+		}
+    
 		// in case of empty list
 		if (pList.isEmpty() || objectIndex < 0 || objectIndex >= pList.size()) {
 			JOptionPane.showMessageDialog(this, "No person selected or list is empty.");
@@ -609,7 +705,8 @@ public class PersonGUI extends JFrame implements ActionListener {
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
-		if (govInput != "" && studentInput != "") {
+     // Changed != "" to != null it appears to give more consistent results - Travis Bauman
+		if (govInput != null && studentInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			// use registeredPerson constructor
@@ -619,8 +716,9 @@ public class PersonGUI extends JFrame implements ActionListener {
 			viewObjectsMenu.insertItemAt(o, a); // add new edited one in place of old one
 			pList.set(a, o);
 		}
-
-		else if (govInput != "") {
+    
+     // Changed != "" to != null it appears to give more consistent results - Travis Bauman
+		else if (govInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			viewObjectsMenu.remove(a);
@@ -643,3 +741,4 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 }
+
