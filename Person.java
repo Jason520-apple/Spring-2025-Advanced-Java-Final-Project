@@ -1,6 +1,7 @@
- // OCCC Spring 2025
+// Travis Bauman, Amida Fombutu, Jason Vo
+// OCCC Spring 2025
 // Advanced Java
-// Unit 8 Project - Person GUI
+// Final Project - Person GUI Application
 
 import java.io.Serializable;
 import java.time.Year;

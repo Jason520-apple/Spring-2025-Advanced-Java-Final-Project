@@ -1,3 +1,4 @@
+// Travis Bauman, Amida Fombutu, Jason Vo
 // OCCC Spring 2025
 // Advanced Java
 // Final Project - Person GUI Application
