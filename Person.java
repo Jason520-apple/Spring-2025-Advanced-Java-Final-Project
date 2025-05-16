@@ -108,6 +108,15 @@ public class Person implements Serializable, Comparable {
 		System.out.println(getClass().getName() + " " + toString() + " is running!");
 	}
 
+	// In Person.java
+public void setDOB(OCCCDate dob) {
+    // Optional: Add null check if dob cannot be null after initial creation
+    // if (dob == null) {
+    //     throw new IllegalArgumentException("Date of birth cannot be null.");
+    // }
+    this.dob = dob;
+}
+
 	// compareTo function from extending Comparable
 	@Override
 	public int compareTo(Object o) {
@@ -155,6 +164,8 @@ public class Person implements Serializable, Comparable {
 				}
 
 			}
+
+			
 
 		}
 

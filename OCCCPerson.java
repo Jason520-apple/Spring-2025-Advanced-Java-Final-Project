@@ -53,5 +53,10 @@ public class OCCCPerson extends RegisteredPerson {
 		return (super.toString() + " {" + studentID + "}\n");
 	}
 
+    public void setStudentID(String studentId2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStudentID'");
+    }
+
 }
 
