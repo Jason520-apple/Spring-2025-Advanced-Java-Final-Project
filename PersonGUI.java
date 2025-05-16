@@ -519,8 +519,8 @@ public class PersonGUI extends JFrame implements ActionListener, ListCellRendere
                     validInput = true;
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "Invalid Date: " + e.getMessage(), "Date Error", JOptionPane.ERROR_MESSAGE);
-                    dlgDobField.requestFocusInWindow();
-                    dlgDobField.selectAll();
+                    //dlgDobField.requestFocusInWindow();
+                    //dlgDobField.selectAll();
                 }
             } else {
                 dialogConfirmed = false;
