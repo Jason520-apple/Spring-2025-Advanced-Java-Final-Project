@@ -50,6 +50,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 	// creating global variables for last modified so any portion of the GUI
 	// is able to use them.
+	// added by Travis Bauman
 	static Long originalLastModified, currentLastModified;
 	
 	// A JMenuBar in Java Swing provides a menu bar for a window, typically a
@@ -248,6 +249,10 @@ public class PersonGUI extends JFrame implements ActionListener {
 		//System.out.println("EXIT FUNCTION CALLED...");
 		
 		int choice = 0;
+
+		// created a JOptionPane.showOptionDialog to allow users to choose
+		// their preferred save and then exit.
+		// Added by Travis Bauman
 		String[] options = {"Save and Exit", "Don't Save and Exit", "Cancel"};
 		
 		// If no original last modified then no file has be created, ask to save
@@ -265,12 +270,14 @@ public class PersonGUI extends JFrame implements ActionListener {
 		// If current last modified is null then no changes have been made free to exit
 		// however, if the current last modified does exist but it is less than or equal to original last modified
 		// then changes have been made but the user has saved the file since then.
+		// Travis Bauman
 		else if (Objects.isNull(currentLastModified) || currentLastModified.compareTo(originalLastModified) < 0) {
 			// close program
 			System.exit(0);
 		}
 		
 		// otherwise an edit has been made and the file has not been saved since changes were made
+			//Travis Bauman
 		else {
 			choice = JOptionPane.showOptionDialog(null,
 					"You have made changes since your last save.", 
@@ -441,6 +448,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 			currentFile = selectedFile;
 			
 			//recording the opening of the file and it's last modified date.
+			//Added by Travis Bauman
 			originalLastModified = currentFile.lastModified();
 
 		}
@@ -521,7 +529,9 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void createNewPerson() {
-		
+
+		//Checks to see if currentFile has been initialized yet if it has updates currentLastModified
+		//Added by Travis Bauman
 		if (currentFile != null) {
 			currentLastModified = currentFile.lastModified();
 		}
@@ -535,6 +545,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
+		// Changed != "" to != null appears to give more consistent results - Travis Bauman
 		if (govInput != null && studentInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
 
@@ -545,6 +556,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 			pList.add(o);// add to the array list that will be saved and loaded
 		}
 
+		// removed && studentInput != "" as it was redundant and preventing just RegisteredPerson from being created - Travis Bauman
 		else if (govInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
 
@@ -562,6 +574,8 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void deletePerson() {
+		//Checks to see if currentFile has been initialized yet if it has updates currentLastModified
+		//Added by Travis Bauman
 		if (currentFile != null) {
 			currentLastModified = currentFile.lastModified();
 		}
@@ -575,7 +589,9 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void editPerson() {
-		
+
+		//Checks to see if currentFile has been initialized yet if it has updates currentLastModified
+		//Added by Travis Bauman
 		if (currentFile != null) {
 			currentLastModified = currentFile.lastModified();
 		}
@@ -601,7 +617,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
-		if (govInput != "" && studentInput != "") {
+		if (govInput != null && studentInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
 
 			// use registeredPerson constructor
@@ -612,7 +628,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 			pList.set(a, o);
 		}
 
-		else if (govInput != "" && studentInput != "") {
+		else if (govInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
 
 			viewObjectsMenu.remove(a);
