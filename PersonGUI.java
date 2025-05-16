@@ -1,3 +1,4 @@
+// Travis Bauman, Amida Fombutu, Jason Vo
 // OCCC Spring 2025
 // Advanced Java
 // Final Project - Person GUI Application
@@ -67,7 +68,7 @@ public class PersonGUI extends JFrame implements ActionListener, ListCellRendere
     private static final Font NAME_FONT = new Font("Segoe UI", Font.BOLD, 14);
     private static final Font DETAIL_FONT = new Font("Segoe UI", Font.PLAIN, 12);
 
-    private JTextField dlgFirstNameField, dlgLastNameField, dlgDobField, dlgGovIdField, dlgStudentIdField;
+    private JTextField dlgFirstNameField, dlgLastNameField, dlgGovIdField, dlgStudentIdField;
     private JComboBox<String> dlgPersonTypeComboBox;
     private JLabel dlgGovIdLabel, dlgStudentIdLabel;
     private boolean dialogConfirmed = false;
