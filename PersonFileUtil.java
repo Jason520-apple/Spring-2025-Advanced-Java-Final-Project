@@ -1,21 +1,32 @@
-// --- File: PersonFileUtil.java ---
-
-
 import java.io.*;
 import java.util.List;
 
 /**
- * Utility class for serializing and deserializing lists of Person objects.
+ * PersonFileUtil.java
+ *
+ * A utility class providing static methods for serializing and deserializing
+ * lists of {@link Person} objects to and from files. This class uses Java's
+ * built-in object serialization mechanism.
+ *
+ * Demonstrates:
+ * - Java Object Serialization for saving and loading collections of objects
+ * - Proper use of try-with-resources for stream management
+ * - Handling of IOExceptions and ClassNotFoundExceptions during file operations
+ *
+ * Author: Amida Fombutu
+ * Course: CS2463 Advanced Java – Spring 2025
  */
 public class PersonFileUtil {
 
     /**
-     * Saves a list of Person (or subclasses) objects to a file.
-     *
-     * @param people   The list of persons to save.
-     * @param filename The filename to save to.
-     * @throws IOException if an I/O error occurs.
+     * Private constructor to prevent instantiation of this utility class.
+     * All methods are static and should be accessed via the class name.
      */
+    private PersonFileUtil() {
+       
+    }
+
+   
     public static void saveToFile(List<Person> people, String filename) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(people);
@@ -23,16 +34,14 @@ public class PersonFileUtil {
     }
 
     /**
-     * Loads a list of Person (or subclasses) objects from a file.
-     *
-     * @param filename The filename to load from.
-     * @return The list of persons.
-     * @throws IOException            if an I/O error occurs.
-     * @throws ClassNotFoundException if deserialization fails.
+     * Loads a list of {@link Person} objects (or its subclasses) from a specified file
+     * that was previously saved using Java object serialization.
+    
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") // Suppressing warning for the cast from Object to List<Person>
     public static List<Person> loadFromFile(String filename) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+         
             return (List<Person>) ois.readObject();
         }
     }
