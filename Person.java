@@ -1,7 +1,7 @@
-// Jason Vo
+ main
 // OCCC Spring 2025
 // Advanced Java
-// Unit 4 Homework - Person / RegisteredPerson / OCCCPerson (without OCCCDate)
+// Unit 8 Project - Person GUI
 
 import java.io.Serializable;
 import java.time.Year;

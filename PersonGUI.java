@@ -1,7 +1,7 @@
-// Jason Vo
+main
 // OCCC Spring 2025
 // Advanced Java
-// Unit 5 Homework - Person Application
+// Unit 8 Project - Person GUI
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -47,12 +46,12 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 	String[] objects; // array used to display Person objects in the JComboBox, updated alongside
 						// ArrayList
-
-	// creating global variables for last modified so any portion of the GUI
+  
+  // creating global variables for last modified so any portion of the GUI
 	// is able to use them.
 	// added by Travis Bauman
 	static Long originalLastModified, currentLastModified;
-	
+
 	// A JMenuBar in Java Swing provides a menu bar for a window, typically a
 	// JFrame. It houses JMenu objects, which, when selected, display JMenuItem
 	// options
@@ -241,14 +240,12 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 	}
 
-	
-	
 	// when the user hits the close button, runs our own exit code, can handle
 	// whatever needs to be taken care of on exit
+  // removed Static - Travis Bauman
 	public void exitMenu() {
-		//System.out.println("EXIT FUNCTION CALLED...");
-		
-		int choice = 0;
+    
+    int choice = 0;
 
 		// created a JOptionPane.showOptionDialog to allow users to choose
 		// their preferred save and then exit.
@@ -370,7 +367,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void createNewFile() {
-		
+
 		// clearing pList and the drop down menu (JComboBox)
 		pList.clear();
 		viewObjectsMenu.removeAllItems();
@@ -382,8 +379,8 @@ public class PersonGUI extends JFrame implements ActionListener {
 		// prompt the user for a file to choose using JFileChooser
 		fileChooser = new JFileChooser();
 
-//		//default directory is our java project
-//		fileChooser.setCurrentDirectory(new File("."));
+		// //default directory is our java project
+		// fileChooser.setCurrentDirectory(new File("."));
 
 		// open dialog menu, select file to open
 		int response = fileChooser.showOpenDialog(fileChooser);
@@ -445,11 +442,11 @@ public class PersonGUI extends JFrame implements ActionListener {
 				viewObjectsMenu.addItem(pList.get(i));
 
 			}
-			
+
 			// for use with save file when overriding its data after edits
 			currentFile = selectedFile;
-			
-			//recording the opening of the file and it's last modified date.
+      
+      //recording the opening of the file and it's last modified date.
 			//Added by Travis Bauman
 			originalLastModified = currentFile.lastModified();
 
@@ -474,12 +471,13 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 		// in other cases when user does create objects
 		else {
-
+      
 			ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(currentFile)); // create a stream
-			
-			//recording the time the file was saved
-			//Added by Travis Bauman
-			originalLastModified = currentFile.lastModified();
+      
+        //recording the time the file was saved
+        //Added by Travis Bauman
+        originalLastModified = currentFile.lastModified();
+      
 			for (int i = 0; i < pList.size(); i++) {
 				objOut.writeObject(pList.get(i));
 			}
@@ -499,7 +497,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 
 		// in other cases when user does create objects
 		else {
-			
+
 			fileChooser = new JFileChooser(); // initialize
 
 			// prompting for save dialog
@@ -508,11 +506,11 @@ public class PersonGUI extends JFrame implements ActionListener {
 			if (response == fileChooser.APPROVE_OPTION) {
 
 				File saveFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
-				
-				//recording the time the file was created.
+        
+        //recording the time the file was created.
 				//Added by Travis Bauman
 				originalLastModified = saveFile.lastModified();
-				
+        
 				// object output stream, outputs to a file output to a file named
 				// Person_GUI_List.ser; copying our objects into a file (.bin)
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(saveFile));
@@ -533,12 +531,14 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void createNewPerson() {
-
-		//Checks to see if currentFile has been initialized yet if it has updates currentLastModified
+  
+    
+    //Checks to see if currentFile has been initialized yet if it has then updates currentLastModified
 		//Added by Travis Bauman
 		if (currentFile != null) {
 			currentLastModified = currentFile.lastModified();
 		}
+    
 		// prompt for the JTextFields for firstName, lastName, govID, and student ID if
 		// applicable
 		String fnInput = JOptionPane.showInputDialog(this, "Enter the first name: ");
@@ -546,12 +546,52 @@ public class PersonGUI extends JFrame implements ActionListener {
 		String govInput = JOptionPane.showInputDialog(this, "Enter the government ID (if applicable): ");
 		String studentInput = JOptionPane.showInputDialog(this, "Enter the student ID (if applicable): ");
 
+		// using a while loop for the program to keep prompting unless the boolean flag
+		// = true which indicates the day entered is valid
+
+		// also declare OCCCDate outside the while loop so that we can use it in the
+		// Person constructors below
+
+		boolean isValidDate = false;
+		OCCCDate dob = null;
+
+		// attempt to create the dob using OCCCDate, plug into the constructors of the
+		// Person classes (parent and child)
+		// split the dob by spaces
+		while (isValidDate == false) {
+			try {
+				String dobInput = JOptionPane.showInputDialog(this, "Enter the date of birth as shown [dd mm yyyy]: ");
+
+				String[] dateMonthYear = dobInput.split(" "); // array of 3
+
+				int date = Integer.parseInt(dateMonthYear[0]);
+				int month = Integer.parseInt(dateMonthYear[1]);
+				int year = Integer.parseInt(dateMonthYear[2]);
+
+				dob = new OCCCDate(date, month, year); // will throw exception if invalid date entered, this gui will
+														// catch
+
+				isValidDate = true; // if the date is successfully created, then we are able to mark true to allow
+									// the program to exit the while loop
+				// if throws exception, then show error pop-up and reprompt the user
+			} catch (InvalidOCCCDateException e) {
+				JOptionPane.showMessageDialog(this, "Invalid date! Please try again with format [dd mm yyyy].", "Error",
+						JOptionPane.ERROR_MESSAGE);
+
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Error parsing the date. Please enter it exactly as [dd mm yyyy].",
+						"Error", JOptionPane.ERROR_MESSAGE);
+
+			}
+
+		}
+
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
-		// Changed != "" to != null appears to give more consistent results - Travis Bauman
+    // Changed != "" to != null it appears to give more consistent results - Travis Bauman
 		if (govInput != null && studentInput != null) {
-			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
+			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			// use registeredPerson constructor
 			OCCCPerson o = new OCCCPerson(r, studentInput);
@@ -559,17 +599,17 @@ public class PersonGUI extends JFrame implements ActionListener {
 			viewObjectsMenu.addItem(o);// add to view menu
 			pList.add(o);// add to the array list that will be saved and loaded
 		}
-
-		// removed && studentInput != "" as it was redundant and preventing just RegisteredPerson from being created - Travis Bauman
+    
+    // Changed != "" to != null it appears to give more consistent results - Travis Bauman
 		else if (govInput != null) {
-			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
+			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			viewObjectsMenu.addItem(r);
 			pList.add(r);
 		}
 
 		else {
-			Person p = new Person(fnInput, lnInput);
+			Person p = new Person(fnInput, lnInput, dob);
 
 			viewObjectsMenu.addItem(p);
 			pList.add(p);
@@ -578,11 +618,13 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void deletePerson() {
-		//Checks to see if currentFile has been initialized yet if it has updates currentLastModified
+    
+    //Checks to see if currentFile has been initialized yet if it has updates currentLastModified
 		//Added by Travis Bauman
 		if (currentFile != null) {
 			currentLastModified = currentFile.lastModified();
 		}
+    
 		// get the selected index of the Person that the user wants to delete
 		int a = objectIndex;
 
@@ -593,12 +635,14 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 	public void editPerson() {
-
-		//Checks to see if currentFile has been initialized yet if it has updates currentLastModified
+    
+    
+    //Checks to see if currentFile has been initialized yet if it has updates currentLastModified
 		//Added by Travis Bauman
 		if (currentFile != null) {
 			currentLastModified = currentFile.lastModified();
 		}
+    
 		// in case of empty list
 		if (pList.isEmpty() || objectIndex < 0 || objectIndex >= pList.size()) {
 			JOptionPane.showMessageDialog(this, "No person selected or list is empty.");
@@ -618,12 +662,52 @@ public class PersonGUI extends JFrame implements ActionListener {
 		String govInput = JOptionPane.showInputDialog(this, "Enter the government ID (if applicable): ");
 		String studentInput = JOptionPane.showInputDialog(this, "Enter the student ID (if applicable): ");
 
+		/// using a while loop for the program to keep prompting unless the boolean flag
+		// = true which indicates the day entered is valid
+
+		// also declare OCCCDate outside the while loop so that we can use it in the
+		// Person constructors below
+
+		boolean isValidDate = false;
+		OCCCDate dob = null;
+
+		// attempt to create the dob using OCCCDate, plug into the constructors of the
+		// Person classes (parent and child)
+		// split the dob by spaces
+		while (isValidDate == false) {
+			try {
+				String dobInput = JOptionPane.showInputDialog(this, "Enter the date of birth as shown [dd mm yyyy]: ");
+
+				String[] dateMonthYear = dobInput.split(" "); // array of 3
+
+				int date = Integer.parseInt(dateMonthYear[0]);
+				int month = Integer.parseInt(dateMonthYear[1]);
+				int year = Integer.parseInt(dateMonthYear[2]);
+
+				dob = new OCCCDate(date, month, year); // will throw exception if invalid date entered, this gui will
+														// catch
+
+				isValidDate = true; // if the date is successfully created, then we are able to mark true to allow
+									// the program to exit the while loop
+				// if throws exception, then show error pop-up and reprompt the user
+			} catch (InvalidOCCCDateException e) {
+				JOptionPane.showMessageDialog(this, "Invalid date! Please try again with format [dd mm yyyy].", "Error",
+						JOptionPane.ERROR_MESSAGE);
+
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Error parsing the date. Please enter it exactly as [dd mm yyyy].",
+						"Error", JOptionPane.ERROR_MESSAGE);
+
+			}
+
+		}
+
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
-		// Changed != "" to != null appears to give more consistent results - Travis Bauman
+     // Changed != "" to != null it appears to give more consistent results - Travis Bauman
 		if (govInput != null && studentInput != null) {
-			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
+			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			// use registeredPerson constructor
 			OCCCPerson o = new OCCCPerson(r, studentInput);
@@ -632,10 +716,10 @@ public class PersonGUI extends JFrame implements ActionListener {
 			viewObjectsMenu.insertItemAt(o, a); // add new edited one in place of old one
 			pList.set(a, o);
 		}
-			
-		// removed && studentInput != "" as it was redundant and preventing just RegisteredPerson from being created - Travis Bauman
+    
+     // Changed != "" to != null it appears to give more consistent results - Travis Bauman
 		else if (govInput != null) {
-			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
+			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, dob, govInput);
 
 			viewObjectsMenu.remove(a);
 
@@ -645,7 +729,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 		}
 
 		else {
-			Person p = new Person(fnInput, lnInput);
+			Person p = new Person(fnInput, lnInput, dob);
 
 			viewObjectsMenu.remove(a);
 
@@ -657,3 +741,4 @@ public class PersonGUI extends JFrame implements ActionListener {
 	}
 
 }
+

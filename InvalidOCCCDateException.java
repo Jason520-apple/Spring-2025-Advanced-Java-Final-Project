@@ -1,7 +1,7 @@
-// Jason Vo
+main
 // OCCC Spring 2025
 // Advanced Java
-// Unit 6 Homework - OCCCDate with Exceptions
+// Unit 8 Project - Person GUI
 
 
 
@@ -35,3 +35,4 @@ public class InvalidOCCCDateException extends IllegalArgumentException {
 	
 	
 }
+

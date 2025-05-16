@@ -1,7 +1,7 @@
-// Jason Vo
+main
 // OCCC Spring 2025
 // Advanced Java
-// Unit 6 Homework - OCCCDate with Exceptions
+// Unit 8 Project - Person GUI
 
 //import GregorianCalendar and Calendar to use 
 
@@ -45,39 +45,42 @@ public class OCCCDate implements Comparable {
 
 	}
 
-	public OCCCDate(int day, int month, int year) {
+	//instead of using try-catch block, make the constructor throw an exception that the GUI will have to catch and reprompt the user
+	public OCCCDate(int day, int month, int year) throws InvalidOCCCDateException {
 
-		try {
-			// create a GregorianCalendar object using the data from constructor
-			this.dayOfMonth = day;
-			this.monthOfYear = month;
-			this.year = year;
+		// create a GregorianCalendar object using the data from constructor
+		this.dayOfMonth = day;
+		this.monthOfYear = month;
+		this.year = year;
 
-			gc = new GregorianCalendar(this.year, this.monthOfYear - 1, this.dayOfMonth);
+		gc = new GregorianCalendar(this.year, this.monthOfYear - 1, this.dayOfMonth);
 
-			// use gc methods to create imaginary days
-			this.dayOfMonth = gc.get(Calendar.DAY_OF_MONTH);
-			this.monthOfYear = gc.get(Calendar.MONTH) + 1; // add one since gc goes from 0-11 and we want 1-12 for
-															// OCCCDate months
-			this.year = gc.get(Calendar.YEAR);
+		// use gc methods to create imaginary days
+		this.dayOfMonth = gc.get(Calendar.DAY_OF_MONTH);
+		this.monthOfYear = gc.get(Calendar.MONTH) + 1; // add one since gc goes from 0-11 and we want 1-12 for
+														// OCCCDate months
+		this.year = gc.get(Calendar.YEAR);
 
-			gc = new GregorianCalendar(this.year, this.monthOfYear - 1, this.dayOfMonth);
+		gc = new GregorianCalendar(this.year, this.monthOfYear - 1, this.dayOfMonth);
 
-			// calling the boolean method to check
-			if (!dateCheckAlgorithm(day, month, year)) {
-				throw new InvalidOCCCDateException();
-			}
-
+		// calling the boolean method to check
+		if (!dateCheckAlgorithm(day, month, year)) {
+			throw new InvalidOCCCDateException();
 		}
+		// note: removed / disabled the try-catch block from the OCCCDate class, since
+		// the catch
+		// block did not allow the GUI program to catch the error, therefore not
+		// reprompting the user if an invalid overflowed date was entered
 
-		catch (InvalidOCCCDateException e) {
-			System.out.println(e);
-			System.out.println("Date entered was: [" + day + " " + month + " " + year + "]");
-			System.out.println("Adjusted OCCCDate is: " + toString());
-			System.out.println("These dates do not match, therefore this is an invalid date! :(\n");
-		}
-
+		// catch (InvalidOCCCDateException e) {
+		// System.out.println(e);
+		// System.out.println("Date entered was: [" + day + " " + month + " " + year +
+		// "]");
+		// System.out.println("Adjusted OCCCDate is: " + toString());
+		// System.out.println("These dates do not match, therefore this is an invalid
+		// date! :(\n");
 	}
+
 
 	public OCCCDate(GregorianCalendar gc) {
 
@@ -322,3 +325,4 @@ public class OCCCDate implements Comparable {
 	}
 
 }
+
