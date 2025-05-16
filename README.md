@@ -1,89 +1,68 @@
-
-## Person Manager Application
+# Person Manager Application
 ## Spring 2025 Advanced Java Final Project - Unit 8 Person GUI
+
 ### Overview
 
-The Person Manager is a user-friendly Java Swing GUI application designed to efficiently manage information about different types of people: basic **Person**, **RegisteredPerson**, and **OCCCPerson**. This application allows you to easily add, edit, delete, search, sort, and persistently store person data.
+The **Person Manager GUI** is a Java Swing application developed for managing records of different person types: **Person**, **RegisteredPerson**, and **OCCCPerson**. It offers a clean interface to create, view, edit, and delete people, with full support for file saving/loading using Java serialization.
 
 ### Person Types
 
-The application caters to three distinct types of individuals, each requiring specific information:
+The application supports three types of people, each with increasing levels of detail:
 
-* **Person**: Requires the individual's **First Name**, **Last Name**, and **Date of Birth**.
-* **RegisteredPerson** (inherits from Person): In addition to the base Person information, it also requires a **Government ID**.
-* **OCCCPerson** (inherits from Person): Besides the basic Person details, it necessitates a **Student ID**.
+- **Person**: Includes First Name, Last Name, and Date of Birth (DOB).
+- **RegisteredPerson**: Inherits from Person and adds a Government ID.
+- **OCCCPerson**: Inherits from RegisteredPerson and adds a Student ID.
 
 ### Core Features
 
-#### Create & Edit Person
+#### 🧍‍♂️ Create & Edit
 
-* A dynamic modal dialog adapts its form based on the selected person type, ensuring only relevant fields are displayed.
-* Robust input validation is implemented for all fields to maintain data integrity.
-* Date handling is streamlined using the custom **OCCCDate** class.
-* The "Save" button triggers both the creation/modification of the person object and its persistence to storage.
+- A reusable modal dialog provides an intuitive form for adding or editing people.
+- The form dynamically updates its fields depending on the selected person type.
+- Input validation is enforced:
+  - Required fields must be filled.
+  - Invalid DOBs trigger an `InvalidOCCCDateException`.
+- DOB is selected using dropdowns (day/month/year) to ensure valid and easy date entry.
 
-#### List Display
+#### 🧾 Display
 
-* People are visually represented using a custom-rendered card layout for an organized and readable display.
-* Each person's information is presented on a card with a fixed width and dynamic height.
-* Key details such as name, date of birth, and relevant IDs are displayed on separate lines for clarity.
-* The card styling dynamically adjusts to the application's light or dark color theme, configurable within the PersonManagerGUI settings.
+- Persons are shown in a scrollable list with a custom-rendered layout.
+- Each list entry displays key attributes like name, DOB, and applicable IDs.
+- The styling respects platform look-and-feel and adjusts for selection focus.
 
-#### Search
+#### 🗃️ File Operations
 
-* A case-insensitive search functionality allows you to find individuals using keyword input.
-* You can filter your search based on:
-    * First Name
-    * Last Name
-    * Student ID (specific to OCCCPerson)
+The **File** menu supports the full document lifecycle:
 
-#### Sorting Options
+- **New**: Clears the current list after prompting to save unsaved changes.
+- **Open...**: Loads a `.dat` file containing serialized person data.
+- **Save**: Saves to the last used file (only available when changes exist).
+- **Save As...**: Prompts for a new file name and saves the data.
+- **Exit**: Confirms unsaved changes before closing the application.
 
-* A convenient dropdown selector provides options to sort the displayed list of people by:
-    * Last Name
-    * Date of Birth
-    * Student ID
-* The sorting functionality utilizes dedicated comparator classes:
-    * `PersonDateOfBirthComparator`
-    * `PersonIDComparator`
+#### 📁 Persistence
 
-#### Delete Functionality
+- Uses Java Object Serialization to store the list of persons.
+- All person types are serializable through a shared hierarchy.
+- File I/O is integrated with `JFileChooser` for platform-native dialogs.
 
-* The application enables users to select and delete multiple people simultaneously.
-* Deletions are immediately reflected in the application's data and the underlying storage.
+#### 💡 Smart UX
 
-#### Reset Functionality
+- “Save” and “Save As” options are disabled while the add/edit dialog is open to prevent incomplete saves.
+- If changes are made and the user closes the app or opens a new file, a “Save before exiting?” prompt appears.
+- The window title reflects the current file name and shows an asterisk (*) when unsaved changes exist.
 
-* A "Reset" button provides a quick way to clear any active search or sort filters.
-* Clicking "Reset" reloads the data from the currently loaded file and restores the default list view.
+### Technical Infrastructure
 
-#### File Management
+- **Person Class Hierarchy**: `Person` → `RegisteredPerson` → `OCCCPerson`
+- **OCCCDate**: A custom class wrapping `GregorianCalendar` with validation logic.
+- **Custom ListCellRenderer**: Used to display formatted entries in the GUI list.
+- **ComboBox-based DOB Input**: Prevents invalid dates through constrained selection.
 
-##### Auto-Load
+---
 
-* Upon the application's first launch, it automatically attempts to load person data from the designated "People's Dataset" file if it exists.
+### Team
 
-##### File Menu
-
-* **New**: Creates a new, empty list of people, discarding the current list without prompting for confirmation.
-* **Open**: Allows you to load person data from a different file using a standard `JFileChooser`.
-* **Save**: Saves the current list of people to the currently active file path.
-* **Save As**: Enables you to save the current list to a new file location. This action also updates the application's active file path.
-* **Exit**: Prompts for confirmation if there are unsaved changes before closing the application.
-
-#### Persistence
-
-* Person data is stored and retrieved using Java object serialization, managed by the `PersonFileUtil` class.
-* Every save operation persists the entire current list of people.
-
-### Utility Infrastructure
-
-#### Custom Classes
-
-* **Person - RegisteredPerson - OCCCPerson Class Hierarchy**: Defines the structure and inheritance relationships for the different person types.
-* **OCCDate**: A custom class that wraps Java's `GregorianCalendar` to provide specific date formatting and handling.
-* **PersonFileUtils**: A utility class responsible for handling the saving and loading of serialized person lists.
-* **PersonListCellRenderer**: A custom Swing `ListCellRenderer` that provides the stylish card-based display of person information.
-* **Dynamic creation/editing mode (Person-to-Person)**: Enables the application to dynamically adjust the input form based on the selected person type during creation and editing.
-* **Comparators for sorting logic**: Includes `PersonDateOfBirthComparator` and `PersonIDComparator` to facilitate the different sorting options.
-Group - Travis Bauman, Amida Fombutu, Jason Vo
+- Travis Bauman
+- Amida Fombutu
+- Jason Vo

@@ -51,4 +51,9 @@ public class RegisteredPerson extends Person {
 		return (super.toString() + " [" + govID + "]");
 	}
 
+    public void setGovernmentID(String govId2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setGovernmentID'");
+    }
+
 }
