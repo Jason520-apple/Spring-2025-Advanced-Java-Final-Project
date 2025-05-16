@@ -256,6 +256,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 		String[] options = {"Save and Exit", "Don't Save and Exit", "Cancel"};
 		
 		// If no original last modified then no file has be created, ask to save
+		//Travis Bauman
 		if(Objects.isNull(originalLastModified)) {
 			choice = JOptionPane.showOptionDialog(null,
 					"You have yet to save this file.", 
@@ -289,7 +290,8 @@ public class PersonGUI extends JFrame implements ActionListener {
 					options[0]);
 		}
 		
-		
+		//Uses switch to implement user choice
+		//Added by Travis Bauman
 		switch (choice) {
 			case 0:
 				try {
@@ -476,6 +478,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 			ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(currentFile)); // create a stream
 			
 			//recording the time the file was saved
+			//Added by Travis Bauman
 			originalLastModified = currentFile.lastModified();
 			for (int i = 0; i < pList.size(); i++) {
 				objOut.writeObject(pList.get(i));
@@ -507,6 +510,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 				File saveFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
 				
 				//recording the time the file was created.
+				//Added by Travis Bauman
 				originalLastModified = saveFile.lastModified();
 				
 				// object output stream, outputs to a file output to a file named
@@ -617,6 +621,7 @@ public class PersonGUI extends JFrame implements ActionListener {
 		// create person object based on the input, work from the children to parent
 		// (most to least parameters)
 		// first student, then registered, then person
+		// Changed != "" to != null appears to give more consistent results - Travis Bauman
 		if (govInput != null && studentInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
 
@@ -627,7 +632,8 @@ public class PersonGUI extends JFrame implements ActionListener {
 			viewObjectsMenu.insertItemAt(o, a); // add new edited one in place of old one
 			pList.set(a, o);
 		}
-
+			
+		// removed && studentInput != "" as it was redundant and preventing just RegisteredPerson from being created - Travis Bauman
 		else if (govInput != null) {
 			RegisteredPerson r = new RegisteredPerson(fnInput, lnInput, govInput);
 
